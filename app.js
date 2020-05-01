@@ -4,6 +4,8 @@ const morgan = require("morgan");
 const bodyParser = require("body-parser");
 const mongoose = require("mongoose");
 const userRoutes = require('./api/routes/user');
+const homeRoutes = require('./api/routes/home');
+const barberRoutes = require('./api/routes/barber');
 
 
 // DB Config
@@ -37,6 +39,8 @@ app.use((req, res, next) => {
 
 // Routes which should handle requests
 app.use("/user", userRoutes);
+app.use("/home", homeRoutes);
+app.use("/barber", barberRoutes);
 
 app.use((req, res, next) => {
   const error = new Error("Not found");

@@ -4,7 +4,6 @@ const mongoose = require("mongoose");
 const bcrypt = require("bcrypt");
 const jwt = require("jsonwebtoken");
 const checkAuth = require('../middleware/check-auth');
-
 const User = require("../models/user");
 
 router.post("/signup", (req, res, next) => {
@@ -37,9 +36,9 @@ router.post("/signup", (req, res, next) => {
               .save()
               .then(result => {
                 console.log(result);
-                res.status(201).json({
+                res.status(200).json({
                   message: "User created",
-                  UserData: result
+                  user: result
                 });
               })
               .catch(err => {
@@ -60,7 +59,7 @@ router.post("/login", (req, res, next) => {
     .then(user => {
       if (user.length < 1) {
         return res.status(401).json({
-          message: "You Must have to signup first"
+          message: "User does not exist. Please Sign up"
         });
       }
       if(user[0].user_type!= req.body.user_type){
@@ -72,7 +71,7 @@ router.post("/login", (req, res, next) => {
       bcrypt.compare(req.body.password, user[0].password, (err, result) => {
         if (err) {
           return res.status(401).json({
-            message: "Auth failed"
+            message: "email or password is not correct."
           });
         }
         if (result) {
@@ -87,7 +86,7 @@ router.post("/login", (req, res, next) => {
             }
           );
           return res.status(200).json({
-            message: "You are Logged in now",
+            message: "You are logged in now",
             token: token,
             user,
           });
@@ -104,6 +103,42 @@ router.post("/login", (req, res, next) => {
         error: err
       });
     });
+});
+
+router.patch("/:userId",  (req, res, next) => {
+  // Validate Request
+  if(!req.params.userId) {
+      return res.status(400).send({
+          message: "This user does not exist"
+      });
+  }
+
+  // Find note and update it with the request body
+  User.findByIdAndUpdate(req.params.userId, {
+    name: req.body.name,
+    email: req.body.email,
+    user_type: req.body.user_type,
+    city: req.body.city,
+    contact_no: req.body.contact_no,
+    address: req.body.address
+  }, {new: true})
+  .then(note => {
+      if(!note) {
+          return res.status(404).send({
+              message: "User not found with id " + req.params.userId
+          });
+      }
+      res.send('User details updated');
+  }).catch(err => {
+      if(err.kind === 'userId') {
+          return res.status(404).send({
+              message: "User not found with id " + req.params.userId
+          });                
+      }
+      return res.status(500).send({
+          message: "Error updating User with id " + req.params.userId
+      });
+  });
 });
 
 router.delete("/:userId",checkAuth, (req, res, next) => {
