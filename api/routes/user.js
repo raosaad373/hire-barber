@@ -117,6 +117,7 @@ router.patch("/:userId",  (req, res, next) => {
   User.findByIdAndUpdate(req.params.userId, {
     name: req.body.name,
     email: req.body.email,
+    password: req.body.password,
     user_type: req.body.user_type,
     city: req.body.city,
     contact_no: req.body.contact_no,

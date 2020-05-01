@@ -12,6 +12,7 @@ router.get("/feed", (req, res, next) => {
         const response = {
           count: docs.length,
           users: docs.map(doc => {
+            if(doc.user_type === "Barber" ){
             return {
               name: doc.name,
               email: doc.email,
@@ -21,6 +22,7 @@ router.get("/feed", (req, res, next) => {
               address: doc.address,
               _id: doc._id,
             };
+          }
           })
         };
         //   if (docs.length >= 0) {

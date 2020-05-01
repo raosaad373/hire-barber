@@ -28,4 +28,37 @@ router.post("/create", checkAuth,  (req, res, next) => {
         });
 });
 
+router.patch("/:barberId", checkAuth, (req, res, next) => {
+    // Validate Request
+    if(!req.params.barberId) {
+        return res.status(400).send({
+            message: "Shop content can not be empty"
+        });
+    }
+  
+    // Find note and update it with the request body
+    Barber.findByIdAndUpdate(req.params.barberId, {
+        name: req.body.name,
+        shop_name: req.body.shop_name,
+        shop_address: req.body.shop_address
+    }, {new: true})
+    .then(note => {
+        if(!note) {
+            return res.status(404).send({
+                message: "Shop not found with id " + req.params.barberId
+            });
+        }
+        res.send('Shops Details Updated');
+    }).catch(err => {
+        if(err.kind === 'PbarberId') {
+            return res.status(404).send({
+                message: "Shop not found with id " + req.params.barberId
+            });                
+        }
+        return res.status(500).send({
+            message: "Error updating shop with id " + req.params.barberId
+        });
+    });
+  });
+
 module.exports = router;
