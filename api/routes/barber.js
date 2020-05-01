@@ -9,7 +9,8 @@ router.post("/create", checkAuth,  (req, res, next) => {
         _id: new mongoose.Types.ObjectId(),
         name: req.body.name,
         shop_name: req.body.shop_name,
-        shop_address: req.body.shop_address
+        shop_address: req.body.shop_address,
+        rating: req.body.rating
       });
       user
         .save()
@@ -40,7 +41,8 @@ router.patch("/:barberId", checkAuth, (req, res, next) => {
     Barber.findByIdAndUpdate(req.params.barberId, {
         name: req.body.name,
         shop_name: req.body.shop_name,
-        shop_address: req.body.shop_address
+        shop_address: req.body.shop_address,
+        rating: req.body.rating
     }, {new: true})
     .then(note => {
         if(!note) {

@@ -13,6 +13,12 @@ const barberSchema = mongoose.Schema({
     shop_address: {
         type: String,
         required: true
+    },
+    rating: {
+        type: Number,
+        required: true,
+        max: 5,
+        min: 0
     }
 });
 

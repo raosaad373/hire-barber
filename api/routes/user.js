@@ -64,7 +64,7 @@ router.post("/login", (req, res, next) => {
       }
       if(user[0].user_type!= req.body.user_type){
         return res.status(401).json({
-          message: `You are not login as ${req.body.user_type}`
+          message: `You must has to login as a ${req.body.user_type}. first`
         });
       }
       else{
