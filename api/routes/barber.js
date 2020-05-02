@@ -32,7 +32,7 @@ const upload = multer({
   fileFilter: fileFilter
 });
 
-router.get("/", checkAuth, (req, res, next) => {
+router.get("/", (req, res, next) => {
   Barber.find()
   .populate('userId')
     .exec()
