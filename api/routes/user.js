@@ -115,7 +115,7 @@ router.post("/login", (req, res, next) => {
             }
           );
           return res.status(200).json({
-            message:  `Welcome ${user[0].name}. You are logged in now`,
+            message:  `Welcome ${user[0].name}. You are now logged in.`,
             token: token
           });
         }
