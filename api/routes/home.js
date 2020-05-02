@@ -6,7 +6,7 @@ const User = require("../models/user");
 
 router.get("/feed", (req, res, next) => {
     User.find()
-      .select("name email user_type city contact_no address userImage")
+      .select("name email user_type city  address contact_no city userImage")
       .exec()
       .then(docs => {
         const response = {
@@ -17,9 +17,9 @@ router.get("/feed", (req, res, next) => {
               name: doc.name,
               email: doc.email,
               user_type: doc.user_type,
-              city: doc.city,
-              contact_no: doc.contact_no,
               address: doc.address,
+              contact_no: doc.contact_no,
+              city: doc.city,
               userImage: doc.userImage,
               _id: doc._id,
             };
