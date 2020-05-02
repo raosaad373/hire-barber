@@ -23,7 +23,8 @@ const barberSchema = mongoose.Schema({
         required: true,
         max: 5,
         min: 0
-    }
+    },
+    shop_Image: { type: String, required: false }
 });
 
 module.exports = mongoose.model('Barber', barberSchema);

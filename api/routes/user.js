@@ -5,8 +5,36 @@ const bcrypt = require("bcrypt");
 const jwt = require("jsonwebtoken");
 const checkAuth = require('../middleware/check-auth');
 const User = require("../models/user");
+const multer = require('multer');
 
-router.post("/signup", (req, res, next) => {
+const storage = multer.diskStorage({
+  destination: function(req, file, cb) {
+    cb(null, './uploads/');
+  },
+  filename: function(req, file, cb) {
+    cb(null,file.originalname);
+  }
+});
+
+const fileFilter = (req, file, cb) => {
+  // reject a file
+  if (file.mimetype === 'image/jpeg' || file.mimetype === 'image/png') {
+    cb(null, true);
+  } else {
+    cb(null, false);
+  }
+};
+
+const upload = multer({
+  storage: storage,
+  limits: {
+    fileSize: 1024 * 1024 * 5
+  },
+  fileFilter: fileFilter
+});
+
+
+router.post("/signup",upload.single('userImage'), (req, res, next) => {
   User.find({ email: req.body.email })
     .exec()
     .then(user => {
@@ -29,7 +57,8 @@ router.post("/signup", (req, res, next) => {
               user_type: req.body.user_type,
               city: req.body.city,
               contact_no: req.body.contact_no,
-              address: req.body.address
+              address: req.body.address,
+              userImage: req.file.path
 
             });
             user

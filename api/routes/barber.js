@@ -4,6 +4,33 @@ const mongoose = require("mongoose");
 const checkAuth = require('../middleware/check-auth');
 const Barber = require("../models/barber");
 const User = require("../models/user");
+const multer = require('multer');
+
+const storage = multer.diskStorage({
+  destination: function(req, file, cb) {
+    cb(null, './uploads/');
+  },
+  filename: function(req, file, cb) {
+    cb(null,file.originalname);
+  }
+});
+
+const fileFilter = (req, file, cb) => {
+  // reject a file
+  if (file.mimetype === 'image/jpeg' || file.mimetype === 'image/png') {
+    cb(null, true);
+  } else {
+    cb(null, false);
+  }
+};
+
+const upload = multer({
+  storage: storage,
+  limits: {
+    fileSize: 1024 * 1024 * 5
+  },
+  fileFilter: fileFilter
+});
 
 router.get("/", checkAuth, (req, res, next) => {
   Barber.find()
@@ -26,7 +53,8 @@ router.get("/", checkAuth, (req, res, next) => {
             name:doc.name,
             shop_name:doc.shop_name,
             shop_address:doc.shop_address,
-            rating:doc.rating
+            rating:doc.rating,
+            shop_Image: doc.shop_Image
           };
         })
       });
@@ -39,7 +67,7 @@ router.get("/", checkAuth, (req, res, next) => {
     });
 });
 
-router.post("/create", checkAuth,async (req, res) => {
+router.post("/create",upload.single('shop_Image'), checkAuth,async (req, res) => {
   const {userId} = req.body //TODO: the logged in user id
   console.log(userId)
   try{
@@ -57,7 +85,8 @@ router.post("/create", checkAuth,async (req, res) => {
           name: req.body.name,
           shop_name: req.body.shop_name,
           shop_address: req.body.shop_address,
-          rating: req.body.rating
+          rating: req.body.rating,
+          shop_Image: req.file.path
         });
         user
           .save()

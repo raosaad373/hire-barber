@@ -30,7 +30,8 @@ const userSchema = mongoose.Schema({
     city: {
         type: String,
         required: true
-    }
+    },
+    userImage: { type: String, required: false }
 });
 
 module.exports = mongoose.model('User', userSchema);
