@@ -10,6 +10,10 @@ const barberSchema = mongoose.Schema({
         type: String, 
         required: true
     },
+    userId: {
+        type: mongoose.Schema.Types.ObjectId,
+        ref: "User"
+      },
     shop_address: {
         type: String,
         required: true
