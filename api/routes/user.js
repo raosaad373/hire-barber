@@ -88,19 +88,19 @@ router.post("/login", (req, res, next) => {
     .then(user => {
       if (user.length < 1) {
         return res.status(401).json({
-          message: "User does not exist. Please Sign up"
+          message: "User does not exist. Please signup"
         });
       }
       if(user[0].user_type!= req.body.user_type){
         return res.status(401).json({
-          message: `You has to sign-up as a ${req.body.user_type} first to login`
+          message: `User type incorrect`
         });
       }
       else{
       bcrypt.compare(req.body.password, user[0].password, (err, result) => {
         if (err) {
           return res.status(401).json({
-            message: "email or password is not correct."
+            message: "Incorrect password"
           });
         }
         if (result) {
@@ -116,7 +116,8 @@ router.post("/login", (req, res, next) => {
           );
           return res.status(200).json({
             message:  `Welcome ${user[0].name}. You are now logged in.`,
-            token: token
+            token: token,
+            user
           });
         }
         res.status(401).json({
@@ -157,7 +158,9 @@ router.patch("/:userId",  (req, res, next) => {
               message: "User not found with id " + req.params.userId
           });
       }
-      res.send('User details updated');
+      return res.status(200).send({
+        message: "User not found with id " + req.params.userId
+    });
   }).catch(err => {
       if(err.kind === 'userId') {
           return res.status(404).send({
