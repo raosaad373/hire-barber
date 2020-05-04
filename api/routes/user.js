@@ -40,7 +40,7 @@ router.post("/signup",upload.single('userImage'), (req, res, next) => {
     .then(user => {
       if (user.length >= 1) {
         return res.status(409).json({
-          message: "Mail already exists"
+          message: "User already exists"
         });
       } else {
         bcrypt.hash(req.body.password, 10, (err, hash) => {
@@ -93,7 +93,7 @@ router.post("/login", (req, res, next) => {
       }
       if(user[0].user_type!= req.body.user_type){
         return res.status(401).json({
-          message: `You must has to login as a ${req.body.user_type}. first`
+          message: `You must has to signUp as a ${req.body.user_type}. first`
         });
       }
       else{
@@ -120,7 +120,7 @@ router.post("/login", (req, res, next) => {
           });
         }
         res.status(401).json({
-          message: "Failed to logged in"
+          message: "email or password is not correct"
         });
       });
     }
