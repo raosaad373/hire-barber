@@ -83,7 +83,7 @@ router.post("/signup",upload.single('userImage'), (req, res, next) => {
 });
 
 router.post("/login", (req, res, next) => {
-  User.findone({ email: req.body.email })
+  User.findOne({ email: req.body.email })
     .exec()
     .then(user => {
       if (user.length < 1) {
@@ -91,13 +91,13 @@ router.post("/login", (req, res, next) => {
           message: "User does not exist. Please signup"
         });
       }
-      if(user[0].user_type!= req.body.user_type){
+      if(user.user_type!= req.body.user_type){
         return res.status(401).json({
-          message: `User type incorrect`
+          message: `Incorrect user type`
         });
       }
       else{
-      bcrypt.compare(req.body.password, user[0].password, (err, result) => {
+      bcrypt.compare(req.body.password, user.password, (err, result) => {
         if (err) {
           return res.status(401).json({
             message: "Incorrect password"
@@ -106,8 +106,8 @@ router.post("/login", (req, res, next) => {
         if (result) {
           const token = jwt.sign(
             {
-              email: user[0].email,
-              userId: user[0]._id
+              email: user.email,
+              userId: user._id
             },
             'secret',
             {
@@ -115,13 +115,13 @@ router.post("/login", (req, res, next) => {
             }
           );
           return res.status(200).json({
-            message:  `Welcome ${user[0].name}. You are now logged in.`,
+            message:  `Welcome ${user.name}. You are now logged in.`,
             token: token,
             user
           });
         }
         res.status(401).json({
-          message: "email or password is not correct"
+          message: "Incorrect password"
         });
       });
     }
