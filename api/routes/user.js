@@ -66,7 +66,7 @@ router.post("/signup",upload.single('userImage'), (req, res, next) => {
               .then(result => {
                 console.log(result);
                 res.status(200).json({
-                  message: "User has been created successfully",
+                  message: "User created successfully",
                   user: result
                 });
               })
@@ -83,7 +83,7 @@ router.post("/signup",upload.single('userImage'), (req, res, next) => {
 });
 
 router.post("/login", (req, res, next) => {
-  User.find({ email: req.body.email })
+  User.findone({ email: req.body.email })
     .exec()
     .then(user => {
       if (user.length < 1) {
