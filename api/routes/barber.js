@@ -40,22 +40,27 @@ router.get("/", (req, res, next) => {
       console.log(docs)
       if(docs.length==0){
         return res.status(404).json({
-          message: "There is Nothing Available in Carts right-now"
+          message: "No User available"
         });
       }
       else{
       res.status(200).json({
         count: docs.length,
-        Carts: docs.map(doc => {
+        User: docs.map(doc => {
           return {
             _id: doc._id,
             userId:doc.userId,
+            shop_details:{
             name:doc.name,
             shop_name:doc.shop_name,
             shop_address:doc.shop_address,
             rating:doc.rating,
             shop_Image: doc.shop_Image
+          }
           };
+          return {
+            message : "hy"
+          }
         })
       });
     }
@@ -75,7 +80,7 @@ router.post("/create",upload.single('shop_Image'), checkAuth,async (req, res) =>
       //console.log(pro)
       if(pro.user_type != "Barber"){
         return res.status(404).json({
-          message: "You are not logged in as Barber. So can't able to create shop"
+          message: "You are not loggedin as Barber. So can't able to create shop"
         });
       }
       else{
@@ -93,7 +98,7 @@ router.post("/create",upload.single('shop_Image'), checkAuth,async (req, res) =>
           .then(result => {
             console.log(result);
             res.status(200).json({
-              message: "Shop Created",
+              message: "Shop created successfully",
               Shop: result
             });
           })
@@ -108,7 +113,7 @@ router.post("/create",upload.single('shop_Image'), checkAuth,async (req, res) =>
   catch (err) {
       console.log(err);
       return res.status(404).json({
-        message: "You Must have to signup first"
+        message: "You must have to signup first"
       });
     }
  
@@ -135,7 +140,12 @@ router.patch("/:barberId", checkAuth, (req, res, next) => {
                 message: "Shop not found with id " + req.params.barberId
             });
         }
-        res.send('Shops Details Updated');
+        else{
+          res.status(200).json({
+            message: "Shop data updated successfully",
+            shop: note
+          });
+      }
     }).catch(err => {
         if(err.kind === 'PbarberId') {
             return res.status(404).send({

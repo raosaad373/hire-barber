@@ -3,10 +3,12 @@ const router = express.Router();
 const mongoose = require("mongoose");
 const checkAuth = require('../middleware/check-auth');
 const User = require("../models/user");
+const Barber = require("../models/barber");
 
 router.get("/feed", (req, res, next) => {
     User.find()
-      .select("name email user_type city  address contact_no city userImage")
+     // .select("name email user_type city  address contact_no city userImage")
+      .populate('barberId')
       .exec()
       .then(docs => {
         const response = {

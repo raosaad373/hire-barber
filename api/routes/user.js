@@ -113,7 +113,8 @@ router.post("/login", (req, res, next) => {
             {
                 expiresIn: "1h"
             }
-          );
+          ); 
+          console.log(user)
           return res.status(200).json({
             message:  `Welcome ${user.name}. You are now logged in.`,
             token: token,
@@ -158,9 +159,12 @@ router.patch("/:userId",  (req, res, next) => {
               message: "User not found with id " + req.params.userId
           });
       }
-      return res.status(200).send({
-        message: "User not found with id " + req.params.userId
-    });
+      else{
+        res.status(200).json({
+          message: "User data updated successfully",
+          user: note
+        });
+    }
   }).catch(err => {
       if(err.kind === 'userId') {
           return res.status(404).send({
@@ -172,6 +176,7 @@ router.patch("/:userId",  (req, res, next) => {
       });
   });
 });
+
 
 router.delete("/:userId",checkAuth, (req, res, next) => {
   User.remove({ _id: req.params.userId })

@@ -19,6 +19,10 @@ const userSchema = mongoose.Schema({
         default: 'Customer',
         required: true
     },
+    barberId: {
+        type: mongoose.Schema.Types.ObjectId,
+        ref: "User"
+      },
     address: {
         type: String,
         required: true
