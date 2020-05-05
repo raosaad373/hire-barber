@@ -58,9 +58,6 @@ router.get("/", (req, res, next) => {
             shop_Image: doc.shop_Image
           }
           };
-          return {
-            message : "hy"
-          }
         })
       });
     }

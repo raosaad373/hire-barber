@@ -16,6 +16,8 @@ router.get("/feed", (req, res, next) => {
           users: docs.map(doc => {
             if(doc.user_type === "Barber" ){
             return {
+              _id: doc._id,
+              userId:doc.barberId,
               name: doc.name,
               email: doc.email,
               user_type: doc.user_type,

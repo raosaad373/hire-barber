@@ -21,7 +21,7 @@ const userSchema = mongoose.Schema({
     },
     barberId: {
         type: mongoose.Schema.Types.ObjectId,
-        ref: "User"
+        ref: "Barber"
       },
     address: {
         type: String,
