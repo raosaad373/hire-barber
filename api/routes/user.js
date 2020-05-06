@@ -86,7 +86,8 @@ router.post("/login", (req, res, next) => {
   User.findOne({ email: req.body.email })
     .exec()
     .then(user => {
-      if (user.length < 1) {
+      console.log(user)
+      if (user == null) {
         return res.status(401).json({
           message: "User does not exist. Please signup"
         });
