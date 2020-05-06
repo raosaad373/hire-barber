@@ -7,7 +7,6 @@ const Barber = require("../models/barber");
 
 router.get("/feed", (req, res, next) => {
     User.find()
-     // .select("name email user_type city  address contact_no city userImage")
       .populate('barberId')
       .exec()
       .then(docs => {
