@@ -6,6 +6,7 @@ const jwt = require("jsonwebtoken");
 const checkAuth = require('../middleware/check-auth');
 const User = require("../models/user");
 const multer = require('multer');
+const { check, validationResult } = require('express-validator');
 
 const storage = multer.diskStorage({
   destination: function(req, file, cb) {
@@ -34,7 +35,13 @@ const upload = multer({
 });
 
 
-router.post("/signup",upload.single('userImage'), (req, res, next) => {
+router.post("/signup",upload.single('userImage'),[
+  check('password').isLength({ min: 8 })
+], (req, res, next) => {
+  const errors = validationResult(req);
+  if (!errors.isEmpty()) {
+    return res.status(422).json({ errors: "Minimum 8 characters required for password" });
+  }
   User.find({ email: req.body.email })
     .exec()
     .then(user => {
@@ -58,7 +65,7 @@ router.post("/signup",upload.single('userImage'), (req, res, next) => {
               city: req.body.city,
               contact_no: req.body.contact_no,
               address: req.body.address,
-              userImage: req.file.path
+              //userImage: req.file.path
 
             });
             user
