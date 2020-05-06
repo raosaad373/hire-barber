@@ -65,7 +65,7 @@ router.post("/signup",upload.single('userImage'),[
               city: req.body.city,
               contact_no: req.body.contact_no,
               address: req.body.address,
-              //userImage: req.file.path
+              userImage: req.file.path
 
             });
             user
